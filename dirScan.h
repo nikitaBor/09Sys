@@ -1,0 +1,1 @@
+void scanDirectory(char *);
