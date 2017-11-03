@@ -1,1 +1,1 @@
-void scanDirectory(char *);
+void scanDirectory(char const *);

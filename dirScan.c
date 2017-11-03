@@ -3,23 +3,26 @@
 #include "dirScan.h"
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
 
-void scanDirectory(char *path){
+void scanDirectory(char const *path){
+  printf("Printing statistics from directory:\n");
   DIR *stream = opendir(path);
   struct dirent *entry;
-  int size;
+  off_t size = 0;
   struct stat sb;
-  
-  printf("Directories:\n");
-  while((entry = readdir(stream)) && !entry->d_type){
-    printf("\t%s\n", entry->d_name);
-    size += entry->d_off;
+  char fullPath[256];
+
+  printf("Files/Directories:\n");
+  while(entry = readdir(stream)){ //runs until files end
+    sprintf(fullPath, "%s%s", path, entry->d_name);
+    stat(fullPath, &sb);
+    size += sb.st_size;
+    printf("\t%s", entry->d_name);
+    printf(entry->d_type == DT_DIR ? " (DIRECTORY) \n" : " (FILE) \n");
   }
-  printf("Files:\n");
-  while(entry = readdir(stream)){
-    printf("\t%s\n", entry->d_name);
-    stat(strcat("path/",entry->d_name),buffer);
-  }
-  printf("%d\n", size);
+  printf("The contents of the directory consist of %ld  bytes.\n", size);
   closedir(stream);
 }
+

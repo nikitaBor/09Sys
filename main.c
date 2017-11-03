@@ -3,5 +3,6 @@
 #include "dirScan.h"
 
 int main(){
-  scanDirectory(".");
+    printf("IMPORTANT NOTE : path must end in /\n");
+    scanDirectory("./");
 }
